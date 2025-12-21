@@ -1,8 +1,20 @@
+using System.Reflection;
 using Microsoft.EntityFrameworkCore;
-using WordInverser.DAL.Entities;
+using WordInverser.Common.Interfaces;
 
 namespace WordInverser.DAL.Context;
 
+/// <summary>
+/// Database context for Word Inverser application.
+/// Entities are configured dynamically through IWordInverserEntityTypeConfiguration implementations.
+/// 
+/// To add a new entity:
+/// 1. Create the entity class in WordInverser.DAL/Entities/
+/// 2. Create a configuration class in WordInverser.DAL/EntityConfigurations/ implementing IWordInverserEntityTypeConfiguration<TEntity>
+/// 3. The entity will be automatically discovered and configured - no changes needed to this DbContext!
+/// 
+/// Access entities using: context.GetDbSet<TEntity>() or context.Set<TEntity>()
+/// </summary>
 public class WordInverserDbContext : DbContext
 {
     public WordInverserDbContext(DbContextOptions<WordInverserDbContext> options)
@@ -10,39 +22,50 @@ public class WordInverserDbContext : DbContext
     {
     }
 
-    public DbSet<WordCache> WordCaches { get; set; }
-    public DbSet<RequestResponse> RequestResponses { get; set; }
+    // Generic method to get DbSet for any entity type
+    public DbSet<TEntity> GetDbSet<TEntity>() where TEntity : class
+    {
+        return Set<TEntity>();
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
-        // WordCache entity configuration
-        modelBuilder.Entity<WordCache>(entity =>
-        {
-            entity.ToTable("WordCache");
-            entity.HasKey(e => e.Id);
-            entity.Property(e => e.Word).IsRequired().HasMaxLength(500);
-            entity.Property(e => e.InversedWord).IsRequired().HasMaxLength(500);
-            entity.Property(e => e.CreatedDate).IsRequired().HasDefaultValueSql("GETUTCDATE()");
-            entity.Property(e => e.UpdatedDate).IsRequired().HasDefaultValueSql("GETUTCDATE()");
-            entity.HasIndex(e => e.Word).IsUnique().HasDatabaseName("IX_WordCache_Word");
-        });
+        // Dynamically discover and apply all entity configurations
+        var configurationsAssembly = Assembly.GetExecutingAssembly();
+        
+        var configurationTypes = configurationsAssembly.GetTypes()
+            .Where(type => !type.IsAbstract && !type.IsInterface)
+            .Where(type => type.GetInterfaces().Any(i => 
+                i.IsGenericType && 
+                i.GetGenericTypeDefinition() == typeof(IWordInverserEntityTypeConfiguration<>)))
+            .ToList();
 
-        // RequestResponse entity configuration
-        modelBuilder.Entity<RequestResponse>(entity =>
+        foreach (var configurationType in configurationTypes)
         {
-            entity.ToTable("RequestResponse");
-            entity.HasKey(e => e.Id);
-            entity.Property(e => e.RequestId).IsRequired().HasDefaultValueSql("NEWID()");
-            entity.Property(e => e.Request).IsRequired();
-            entity.Property(e => e.Response).IsRequired();
-            entity.Property(e => e.Tags).IsRequired();
-            entity.Property(e => e.IsSuccess).IsRequired().HasDefaultValue(true);
-            entity.Property(e => e.CreatedDate).IsRequired().HasDefaultValueSql("GETUTCDATE()");
-            entity.HasIndex(e => e.CreatedDate).HasDatabaseName("IX_RequestResponse_CreatedDate");
-            entity.HasIndex(e => e.IsSuccess).HasDatabaseName("IX_RequestResponse_IsSuccess");
-            entity.HasIndex(e => e.RequestId).IsUnique();
-        });
+            // Get the entity type from IWordInverserEntityTypeConfiguration<TEntity>
+            var entityType = configurationType.GetInterfaces()
+                .First(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IWordInverserEntityTypeConfiguration<>))
+                .GetGenericArguments()[0];
+
+            // Create an instance of the configuration
+            var configurationInstance = Activator.CreateInstance(configurationType);
+
+            // Get the Configure method
+            var configureMethod = configurationType.GetMethod("Configure");
+
+            // Get the Entity<TEntity>() method from ModelBuilder
+            var entityMethod = typeof(ModelBuilder)
+                .GetMethods()
+                .First(m => m.Name == "Entity" && m.IsGenericMethodDefinition && m.GetParameters().Length == 0)
+                .MakeGenericMethod(entityType);
+
+            // Call Entity<TEntity>() to get EntityTypeBuilder<TEntity>
+            var entityTypeBuilder = entityMethod.Invoke(modelBuilder, null);
+
+            // Invoke Configure method with the entity type builder
+            configureMethod?.Invoke(configurationInstance, new[] { entityTypeBuilder });
+        }
     }
 }

@@ -103,6 +103,11 @@ Update the connection string in `WordInverser.API\appsettings.json`:
 }
 ```
 
+**Note:** If using a SQL Server named instance, include the instance name in the server:
+```json
+"Server=localhost\\INSTANCENAME;Database=WordInverserDB;..."
+```
+
 For SQL Server authentication, use:
 
 ```json
