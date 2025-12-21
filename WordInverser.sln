@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordInverser.Business", "Wo
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8A62-A8AB45F8B119}") = "WordInverser.Database", "WordInverser.Database\WordInverser.Database.sqlproj", "{B8E5C7D3-6A9F-4E8B-9C2D-1F3A5B7E9D2C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordInverser.Tests", "WordInverser.Tests\WordInverser.Tests.csproj", "{42EF58AB-5BC1-45A8-AA99-4EEF3538F3F6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -77,6 +79,18 @@ Global
 		{B8E5C7D3-6A9F-4E8B-9C2D-1F3A5B7E9D2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B8E5C7D3-6A9F-4E8B-9C2D-1F3A5B7E9D2C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B8E5C7D3-6A9F-4E8B-9C2D-1F3A5B7E9D2C}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{42EF58AB-5BC1-45A8-AA99-4EEF3538F3F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42EF58AB-5BC1-45A8-AA99-4EEF3538F3F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42EF58AB-5BC1-45A8-AA99-4EEF3538F3F6}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{42EF58AB-5BC1-45A8-AA99-4EEF3538F3F6}.Debug|x64.Build.0 = Debug|Any CPU
+		{42EF58AB-5BC1-45A8-AA99-4EEF3538F3F6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{42EF58AB-5BC1-45A8-AA99-4EEF3538F3F6}.Debug|x86.Build.0 = Debug|Any CPU
+		{42EF58AB-5BC1-45A8-AA99-4EEF3538F3F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42EF58AB-5BC1-45A8-AA99-4EEF3538F3F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42EF58AB-5BC1-45A8-AA99-4EEF3538F3F6}.Release|x64.ActiveCfg = Release|Any CPU
+		{42EF58AB-5BC1-45A8-AA99-4EEF3538F3F6}.Release|x64.Build.0 = Release|Any CPU
+		{42EF58AB-5BC1-45A8-AA99-4EEF3538F3F6}.Release|x86.ActiveCfg = Release|Any CPU
+		{42EF58AB-5BC1-45A8-AA99-4EEF3538F3F6}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

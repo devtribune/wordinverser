@@ -358,10 +358,13 @@ WordInverser/
 │   ├── Interfaces/                # Common interfaces
 │   ├── Models/                    # DTOs and models
 │   └── Exceptions/                # Custom exceptions
-└── WordInverser.Database/         # SQL Database project
-    ├── Tables/                    # Table definitions
-    ├── StoredProcedures/          # Stored procedures
-    └── Scripts/                   # Pre/Post deployment scripts
+├── WordInverser.Database/         # SQL Database project
+│   ├── Tables/                    # Table definitions
+│   ├── StoredProcedures/          # Stored procedures
+│   └── Scripts/                   # Pre/Post deployment scripts
+└── WordInverser.Tests/            # Unit test project
+    ├── Business/                  # Business layer tests
+    └── Controllers/               # Controller tests
 ```
 
 ## Technologies Used
