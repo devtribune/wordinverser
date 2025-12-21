@@ -1,0 +1,31 @@
+@WordInverser.API_HostAddress = https://localhost:7000
+
+### Test Word Inversion
+POST {{WordInverser.API_HostAddress}}/api/v1/words/inverse
+Content-Type: application/json
+
+{
+  "sentence": "Hello, World! This is a test."
+}
+
+###
+
+### Test Word Inversion with Special Characters
+POST {{WordInverser.API_HostAddress}}/api/v1/words/inverse
+Content-Type: application/json
+
+{
+  "sentence": "@test# ab-cd --hello--"
+}
+
+###
+
+### Get All Request/Response Pairs (Page 1)
+GET {{WordInverser.API_HostAddress}}/api/v1/requestresponse?pageNumber=1&pageSize=10
+
+###
+
+### Search Request/Response by Word
+GET {{WordInverser.API_HostAddress}}/api/v1/requestresponse/search?searchWord=Hello&pageNumber=1&pageSize=10
+
+###

@@ -1,0 +1,12 @@
+CREATE TABLE [dbo].[WordCache]
+(
+    [Id] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    [Word] NVARCHAR(500) NOT NULL UNIQUE,
+    [InversedWord] NVARCHAR(500) NOT NULL,
+    [CreatedDate] DATETIME2(7) NOT NULL DEFAULT GETUTCDATE(),
+    [UpdatedDate] DATETIME2(7) NOT NULL DEFAULT GETUTCDATE()
+);
+GO
+
+CREATE INDEX [IX_WordCache_Word] ON [dbo].[WordCache] ([Word]);
+GO
