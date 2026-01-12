@@ -141,6 +141,6 @@ public class WordInversionServiceTests
         var result = await _service.InverseWordsAsync(request);
 
         // Assert
-        Assert.IsTrue(result.ProcessingTimeMs >= 0);
+        Assert.IsGreaterThanOrEqualTo(result.ProcessingTimeMs, 0);
     }
 }
